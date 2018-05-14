@@ -391,7 +391,7 @@
 		 *
 		 * @since 4.10.0
 		 */
-		hide: function() {
+		hideFromToolbar: function() {
 			var element;
 			if ( this._.id ) {
 				element = CKEDITOR.document.getById( this._.id );
@@ -413,7 +413,7 @@
 		 *
 		 * @since 4.10.0
 		 */
-		show: function() {
+		showInToolbar: function() {
 			var element;
 			if ( this._.id && this.hidden ) {
 				element = CKEDITOR.document.getById( this._.id );
