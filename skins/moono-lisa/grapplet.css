@@ -105,12 +105,12 @@ span.cke_dialog_ui_button {
     color: #474e56 !important;
 }
 
-input, button, select:focus {
+.cke_dialog_body input, .cke_dialog_body button, .cke_dialog_body select:focus {
     outline: none !important;
     box-shadow: none !important;
 }
 
-input {
+.cke_dialog_body input {
     border-top: none !important;
     border-right: none !important;
     border-left: none !important;
