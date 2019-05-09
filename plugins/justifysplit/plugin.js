@@ -10,20 +10,20 @@ CKEDITOR.plugins.add( 'justifysplit', {
 		editor.ui.add( 'JustifySplit', CKEDITOR.UI_SPLITBUTTON, {
 			label: 'Text Align',
 			items: [ {
-				label: 'Left',
+				label: editor.lang.common.alignLeft,
 				command: 'justifyleft',
 				icon: 'justifyleft',
 				'default': true
 			}, {
-				label: 'Center',
+				label: editor.lang.common.center,
 				command: 'justifycenter',
 				icon: 'justifycenter'
 			}, {
-				label: 'Right',
+				label: editor.lang.common.alignRight,
 				command: 'justifyright',
 				icon: 'justifyright'
 			}, {
-				label: 'Justify',
+				label: editor.lang.common.justify,
 				command: 'justifyblock',
 				icon: 'justifyblock'
 			} ]
