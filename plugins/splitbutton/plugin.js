@@ -5,6 +5,8 @@
 ( function() {
 	'use strict';
 
+	var splitButtonInstance = {};
+
 	function getLastActiveCommands( editor, allItems ) {
 		var activeItem = null;
 		for ( var i in allItems ) {
@@ -58,7 +60,10 @@
 			item.onClick = item.onClick || item.click ||  function() {
 				editor.execCommand( this.command, this.commandData );
 			};
-			item.click = item.onClick;
+			//item.click = item.onClick;
+			item.click = function ( editor ) {
+				splitButtonInstance.btn.click(editor);
+			};
 
 			if ( item.command ) {
 				editor.getCommand( item.command ).on( 'state', function() {
@@ -89,7 +94,7 @@
 
 			properties.items[ item.id ] = item;
 			properties.buttons[ item.id ] = new CKEDITOR.ui.button( CKEDITOR.tools.extend( {
-				click: item.onClick, label: definition.label + ' ' + item.label
+				/*click: item.onClick, */label: definition.label + ' ' + item.label
 			}, item ) );
 
 			editor.addFeature( properties.buttons[ item.id ] );
@@ -178,7 +183,9 @@
 				statics: {
 					handler: {
 						create: function( definition ) {
-							return new CKEDITOR.ui.splitButton( definition, definition.items );
+							var btn = new CKEDITOR.ui.splitButton( definition, definition.items );
+							splitButtonInstance.btn = btn;
+							return btn;
 						}
 					}
 				}
