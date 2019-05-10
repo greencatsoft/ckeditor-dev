@@ -95,6 +95,8 @@ CKEDITOR.plugins.add( 'menu', {
 		' {ariaChecked}' +
 		' draggable="false"';
 
+	menuItemSource += ' onfocus="this.blur();"';
+
 	// Some browsers don't cancel key events in the keydown but in the
 	// keypress.
 	// TODO: Check if really needed.
