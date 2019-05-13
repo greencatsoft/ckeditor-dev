@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
+For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+-->
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>CKEditor Split button Sample</title>
+	<script src="../../../ckeditor.js"></script>
+	<link rel="stylesheet" href="../../../samples/css/samples.css">
+	<link rel="stylesheet" href="../../../samples/toolbarconfigurator/lib/codemirror/neo.css">
+</head>
+<body id="main">
+
+<style>
+	.adjoined-bottom:before {
+		height: 270px;
+	}
+</style>
+
+<nav class="navigation-a">
+	<div class="grid-container">
+		<ul class="navigation-a-left grid-width-70">
+			<li><a href="http://ckeditor.com">Project Homepage</a></li>
+			<li><a href="https://github.com/ckeditor/ckeditor-dev/issues">I found a bug</a></li>
+			<li><a href="http://github.com/ckeditor/ckeditor-dev" class="icon-pos-right icon-navigation-a-github">Fork CKEditor on GitHub</a></li>
+		</ul>
+		<ul class="navigation-a-right grid-width-30">
+			<li><a href="http://ckeditor.com/blog-list">CKEditor Blog</a></li>
+		</ul>
+	</div>
+</nav>
+
+<header class="header-a">
+	<div class="grid-container">
+		<h1 class="header-a-logo grid-width-30">
+			<img src="../../../samples/img/logo.svg" onerror="this.src='../../../samples/img/logo.png'; this.onerror=null;" alt="CKEditor Sample">
+		</h1>
+	</div>
+</header>
+
+<main>
+	<div class="adjoined-top">
+		<div class="grid-container">
+			<div class="content grid-width-100">
+				<h1>Split Button Demo</h1>
+				<p>This sample shows the progress of work on Split Button. Play around with it and leave your feedback on <a href="https://github.com/ckeditor/ckeditor-dev/issues/1679"> Github</a>.</p>
+			</div>
+		</div>
+	</div>
+	<div class="adjoined-bottom">
+		<div class="grid-container">
+			<div class="grid-width-100">
+				<textarea id="editor">
+					<p>This line has no alignment at all.</p>
+					<p style="text-align: left;">Left alignment</p>
+					<p style="text-align: center;">Center alignment</p>
+					<p style="text-align: right;">Right alignment</p>
+					<p style="text-align: justify;">Justified line</p>
+				</textarea>
+			</div>
+		</div>
+	</div>
+</main>
+
+<footer class="footer-a grid-container">
+	<div class="grid-container">
+		<p class="grid-width-100">
+			CKEditor &ndash; The text editor for the Internet &ndash; <a class="samples" href="http://ckeditor.com/">http://ckeditor.com</a>
+		</p>
+		<p class="grid-width-100" id="copy">
+			Copyright &copy; 2003-2018, <a class="samples" href="http://cksource.com/">CKSource</a> &ndash; Frederico Knabben. All rights reserved.
+		</p>
+	</div>
+</footer>
+<script type="text/javascript" src="./sampleplugins/justifysplit.js"></script>
+<script type="text/javascript" src="sampleplugins/underlinesplit.js"></script>
+<script>
+		CKEDITOR.replace( 'editor', {
+			plugins: 'sourcearea,toolbar,undo,wysiwygarea,list,justifysplit,underlinesplit,format,link,basicstyles,splitbutton',
+			toolbar: [
+				{ name: 'document', items: [ 'Source', 'Undo', 'Redo' ] },
+				{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Strike', 'UnderlineSplit' ] },
+				{ name: 'align', items: [ 'JustifySplit' ] },
+				{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList' ] }
+			],
+			extraAllowedContent: 'u{text-decoration-style,-webkit-text-decoration-style}',
+			height: 500
+		} );
+</script>
+
+</body>
+</html>

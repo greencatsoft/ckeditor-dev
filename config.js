@@ -40,6 +40,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'indentlist,' +
 		'indentblock,' +
 		'justify,' +
+		'justifysplit,' +
 		'language,' +
 		'link,' +
 		'list,' +
@@ -72,6 +73,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'undo,' +
 		'uploadimage,' +
 		'wysiwygarea';
+	config.removeButtons = 'JustifyLeft,JustifyCenter,JustifyRight,JustifyBlock';
 	// %REMOVE_END%
 };
 

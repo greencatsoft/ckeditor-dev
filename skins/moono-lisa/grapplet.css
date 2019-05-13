@@ -126,3 +126,100 @@ span.cke_dialog_ui_button {
     display: none;
 }
 
+@font-face {
+	font-family: 'GrappletIcons';
+	src: url("/assets/fonts/GrappletIcons.eot?wmr42p");
+	src: url("/assets/fonts/GrappletIcons.eot?wmr42p#iefix") format("embedded-opentype"),url("/assets/fonts/GrappletIcons.ttf?wmr42p") format("truetype"),url("/assets/fonts/GrappletIcons.woff?wmr42p") format("woff"),url("/assets/fonts/GrappletIcons.svg?wmr42p#GrappletIcons") format("svg");
+	font-weight: normal;
+	font-style: normal
+}
+
+.cke_menu_panel {
+	width: 50px !important;
+	background-color: #f4f4f4 !important;
+	border: 0 !important;
+}
+
+.cke_menubutton__justifyleft0 .cke_button_icon,
+.cke_menubutton__justifycenter1 .cke_button_icon,
+.cke_menubutton__justifyright2 .cke_button_icon,
+.cke_menubutton__justifyblock3 .cke_button_icon,
+.cke_menubutton__justifyleft0 .cke_menubutton_label,
+.cke_menubutton__justifycenter1 .cke_menubutton_label,
+.cke_menubutton__justifyright2 .cke_menubutton_label,
+.cke_menubutton__justifyblock3 .cke_menubutton_label {
+	display: none;
+}
+
+.cke_menubutton__justifyleft0 .cke_menubutton_icon,
+.cke_menubutton__justifycenter1 .cke_menubutton_icon,
+.cke_menubutton__justifyright2 .cke_menubutton_icon,
+.cke_menubutton__justifyblock3 .cke_menubutton_icon {
+	color: inherit;
+	cursor: pointer;
+	background: none !important;
+	width: 1.625rem;
+	height: 1.625rem;
+	margin: .3125rem .4375rem;
+	float: none;
+	display: block;
+	text-align: center;
+	font-size: 0;
+}
+
+.cke_menubutton__justifyleft0 .cke_menubutton_icon::after,
+.cke_menubutton__justifycenter1 .cke_menubutton_icon::after,
+.cke_menubutton__justifyright2 .cke_menubutton_icon::after,
+.cke_menubutton__justifyblock3 .cke_menubutton_icon::after {
+	font-family: "GrappletIcons";
+	font-size: 24px;
+	border: none;
+	width: initial;
+	height: initial;
+	margin: -.625rem -.4375rem -.625rem 0;
+}
+
+.cke_menubutton__justifyleft0.cke_menubutton_on,
+.cke_menubutton__justifycenter1.cke_menubutton_on,
+.cke_menubutton__justifyright2.cke_menubutton_on,
+.cke_menubutton__justifyblock3.cke_menubutton_on {
+	background-color: #f4f4f4;
+	border: 0;
+}
+
+.cke_menubutton__justifyleft0.cke_menubutton_on .cke_menubutton_icon::after,
+.cke_menubutton__justifycenter1.cke_menubutton_on .cke_menubutton_icon::after,
+.cke_menubutton__justifyright2.cke_menubutton_on .cke_menubutton_icon::after,
+.cke_menubutton__justifyblock3.cke_menubutton_on .cke_menubutton_icon::after {
+	color: #1a77ff;
+}
+
+.cke_menubutton__justifyleft0.cke_menubutton:hover,
+.cke_menubutton__justifycenter1.cke_menubutton:hover,
+.cke_menubutton__justifyright2.cke_menubutton:hover,
+.cke_menubutton__justifyblock3.cke_menubutton:hover {
+	background-color: #f4f4f4;
+}
+
+.cke_menubutton__justifyleft0 .cke_menubutton_icon:hover,
+.cke_menubutton__justifycenter1 .cke_menubutton_icon:hover,
+.cke_menubutton__justifyright2 .cke_menubutton_icon:hover,
+.cke_menubutton__justifyblock3 .cke_menubutton_icon:hover {
+	color: #474e56;
+}
+
+.cke_menubutton__justifyleft0 .cke_menubutton_icon::after {
+	content: "\ea2e";
+}
+
+.cke_menubutton__justifycenter1 .cke_menubutton_icon::after {
+	content: "\ea2d";
+}
+
+.cke_menubutton__justifyright2 .cke_menubutton_icon::after {
+	content: "\ea2f";
+}
+
+.cke_menubutton__justifyblock3 .cke_menubutton_icon::after {
+	content: "\e90e";
+}

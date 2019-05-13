@@ -11,6 +11,7 @@
 		' tabindex="-1"' +
 		' hidefocus="true"' +
 		' role="button"' +
+		'{style}' +
 		' aria-labelledby="{id}_label"' +
 		' aria-describedby="{id}_description"' +
 		' aria-haspopup="{hasArrow}"' +
@@ -31,10 +32,10 @@
 		' onfocus="return CKEDITOR.tools.callFunction({focusFn},event);" ' +
 		( CKEDITOR.env.ie ? 'onclick="return false;" onmouseup' : 'onclick' ) + // https://dev.ckeditor.com/ticket/188
 			'="CKEDITOR.tools.callFunction({clickFn},this);return false;">' +
-		'<span class="cke_button_icon cke_button__{iconName}_icon" style="{style}"';
+		'{icon}';
 
 
-	template += '>&nbsp;</span>' +
+	template +=
 		'<span id="{id}_label" class="cke_button_label cke_button__{name}_label" aria-hidden="false">{label}</span>' +
 		'<span id="{id}_description" class="cke_button_label" aria-hidden="false">{ariaShortcut}</span>' +
 		'{arrowHtml}' +
@@ -283,14 +284,15 @@
 			} else {
 				iconPath = iconName;
 			}
-
-			var params = {
+			var iconStyle = CKEDITOR.skin.getIconStyle( iconPath, ( editor.lang.dir == 'rtl' ), overridePath, this.iconOffset ),
+				params = {
 				id: id,
 				name: name,
 				iconName: iconName,
 				label: this.label,
 				cls: this.className || '',
 				state: stateName,
+				style: this.style ? ( ' style="' + this.style + '"' ) : '',
 				ariaDisabled: stateName == 'disabled' ? 'true' : 'false',
 				title: this.title + ( shortcut ? ' (' + shortcut.display + ')' : '' ),
 				ariaShortcut: shortcut ? editor.lang.common.keyboardShortcut + ' ' + shortcut.aria : '',
@@ -299,7 +301,7 @@
 				keydownFn: keydownFn,
 				focusFn: focusFn,
 				clickFn: clickFn,
-				style: CKEDITOR.skin.getIconStyle( iconPath, ( editor.lang.dir == 'rtl' ), overridePath, this.iconOffset ),
+				icon: ( this.icon == false ? '' : '<span class="cke_button_icon cke_button__' + iconName + '_icon" style="' + iconStyle + '">&nbsp;</span>' ),
 				arrowHtml: this.hasArrow ? btnArrowTpl.output() : ''
 			};
 
@@ -382,6 +384,46 @@
 				feature = editor.getCommand( this.command ) || feature;
 
 			return this._.feature = feature;
+		},
+
+		/**
+		 * Hides this button from UI.
+		 *
+		 * @since 4.11.0
+		 */
+		hide: function() {
+			var element;
+			if ( this._.id ) {
+				element = CKEDITOR.document.getById( this._.id );
+				element.setStyle( 'display', 'none' );
+			} else {
+				// If button hasn't been rendered, then add initial style.
+				if ( !this.style ) {
+					this.style = 'display: none;';
+				} else {
+					this.style += 'display: none;';
+				}
+			}
+
+			this.hidden = true;
+		},
+
+		/**
+		 * Shows this button in UI.
+		 *
+		 * @since 4.11.0
+		 */
+		show: function() {
+			var element;
+			if ( this.hidden ) {
+				if ( this._.id ) {
+					element = CKEDITOR.document.getById( this._.id );
+					element.removeStyle( 'display' );
+				} else {
+					this.style.replace( /display:\s*none;*/g, '' );
+				}
+				delete this.hidden;
+			}
 		}
 	};
 
@@ -401,8 +443,9 @@
 	 * @param {String} definition.command The command to be executed once the button is activated.
 	 * @param {String} definition.toolbar The {@link CKEDITOR.config#toolbarGroups toolbar group} into which
 	 * the button will be added. An optional index value (separated by a comma) determines the button position within the group.
-	 * @param {String} definition.icon The path to a custom icon or icon name registered by another plugin. Custom icon paths
-	 * are supported since the **4.9.0** version.
+	 * @param {String} definition.style The optional inline style that will be applied on button. Custom button styles are supported sins the **4.11.0** version.
+	 * @param {String/Boolean} definition.icon The path to a custom icon or icon name registered by another plugin. Custom icon paths
+	 * are supported since the **4.9.0** version. Since **4.11** if boolean `false` is passed no icon will be rendered.
 	 *
 	 * To use icon registered by another plugin, icon parameter should be used like:
 	 *

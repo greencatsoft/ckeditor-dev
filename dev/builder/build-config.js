@@ -65,6 +65,8 @@ var CKBUILDER_CONFIG = {
 		'floatingspace' : 1,
 		'indentlist' : 1,
 		'justify' : 1,
+		'justifysplit' : 1,
+		'menubutton' : 1,
 		'pastetext' : 1,
 		'removeformat' : 1,
 		'selectall' : 1,

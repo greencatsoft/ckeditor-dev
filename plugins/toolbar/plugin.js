@@ -17,7 +17,7 @@
 	toolbox.prototype.focus = function() {
 		for ( var t = 0, toolbar; toolbar = this.toolbars[ t++ ]; ) {
 			for ( var i = 0, item; item = toolbar.items[ i++ ]; ) {
-				if ( item.focus ) {
+				if ( item.focus && !item.button.hidden ) {
 					item.focus();
 					return;
 				}
@@ -82,7 +82,7 @@
 								// Look for the first item that accepts focus.
 								if ( toolbar.items.length ) {
 									item = toolbar.items[ endFlag ? ( toolbar.items.length - 1 ) : 0 ];
-									while ( item && !item.focus ) {
+									while ( item && !item.focus || item.button.hidden ) {
 										item = endFlag ? item.previous : item.next;
 
 										if ( !item )
@@ -97,15 +97,7 @@
 							return false;
 
 						case rightKeyCode:
-							next = item;
-							do {
-								// Look for the next item in the toolbar.
-								next = next.next;
-
-								// If it's the last item, cycle to the first one.
-								if ( !next && toolbarGroupCycling ) next = item.toolbar.items[ 0 ];
-							}
-							while ( next && !next.focus );
+							next = getNextOrPreviousItem( item, 'next' );
 
 							// If available, just focus it, otherwise focus the
 							// first one.
@@ -126,18 +118,8 @@
 							return false;
 						case leftKeyCode:
 						case 38: // UP-ARROW
-							next = item;
-							do {
-								// Look for the previous item in the toolbar.
-								next = next.previous;
+							next = getNextOrPreviousItem( item, 'previous' );
 
-								// If it's the first item, cycle to the last one.
-								if ( !next && toolbarGroupCycling ) next = item.toolbar.items[ item.toolbar.items.length - 1 ];
-							}
-							while ( next && !next.focus );
-
-							// If available, just focus it, otherwise focus the
-							// last one.
 							if ( next )
 								next.focus();
 							else {
@@ -159,6 +141,29 @@
 							return false;
 					}
 					return true;
+					function getNextOrPreviousItem( item, nextOrPrevious ) {
+						var toBeFocused;
+						do {
+							// Look for the next item in the toolbar.
+							toBeFocused = item[ nextOrPrevious ];
+
+							while ( toBeFocused && toBeFocused.button && toBeFocused.button.hidden ) {
+								toBeFocused = toBeFocused[ nextOrPrevious ];
+							}
+							// If it's the last item, cycle to the first one.
+							if ( !toBeFocused && toolbarGroupCycling ) {
+								if ( nextOrPrevious === 'previous' ) {}
+								toBeFocused = item.toolbar.items[ nextOrPrevious === 'next' ? 0 : item.toolbar.items.length - 1 ];
+
+								if ( toBeFocused.button.hidden ) {
+									return getNextOrPreviousItem( toBeFocused, nextOrPrevious );
+								}
+							}
+						}
+						while ( toBeFocused && !toBeFocused.focus );
+
+						return toBeFocused;
+					}
 				};
 
 			editor.on( 'uiSpace', function( event ) {
@@ -271,15 +276,12 @@
 								groupStarted = 0;
 							}
 
-							function addItem( item ) { // jshint ignore:line
-								var itemObj = item.render( editor, output );
+							function bindPreviousNext( index, toolbarObj, itemObj ) { // jshint ignore:line
 								index = toolbarObj.items.push( itemObj ) - 1;
-
 								if ( index > 0 ) {
 									itemObj.previous = toolbarObj.items[ index - 1 ];
 									itemObj.previous.next = itemObj;
 								}
-
 								itemObj.toolbar = toolbarObj;
 								itemObj.onkey = itemKeystroke;
 
@@ -289,6 +291,23 @@
 									if ( !editor.toolbox.focusCommandExecuted )
 										editor.focus();
 								};
+							}
+
+							function addItem( item ) { // jshint ignore:line
+								var itemObj = item.render( editor, output ),
+									i,
+									rendered;
+
+								// When dealing with splitbutton we need to add all its extra buttons to toolbar, and bound them with .previous and .next to other toolbar elements.
+								if ( CKEDITOR.ui.splitButton && itemObj.button instanceof CKEDITOR.ui.splitButton ) {
+									rendered = itemObj.button.rendered;
+
+									for ( i = 0; i < rendered.length; i++ ) {
+										bindPreviousNext( index, toolbarObj, rendered [ i ] );
+									}
+								}
+
+								bindPreviousNext( index, toolbarObj, itemObj );
 							}
 
 							if ( pendingSeparator ) {
