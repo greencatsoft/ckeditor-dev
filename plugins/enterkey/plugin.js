@@ -382,6 +382,11 @@
 
 						if ( CKEDITOR.dtd.$removeEmpty[ element.getName() ] ) {
 							element = element.clone();
+
+							if ( element.$.innerHTML == '' ) {
+								element.$.innerHTML = '&#8203;';
+							}
+
 							newBlock.moveChildren( element );
 							newBlock.append( element );
 						}
