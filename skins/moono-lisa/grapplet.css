@@ -90,7 +90,7 @@ span.cke_dialog_ui_button {
 }
 
 .cke_dialog_close_button:before {
-    content: "\e9ed";
+    content: "\eb19";
 }
 
 .cke_dialog_close_button span {
@@ -209,17 +209,17 @@ span.cke_dialog_ui_button {
 }
 
 .cke_menubutton__justifyleft0 .cke_menubutton_icon::after {
-	content: "\ea2e";
+	content: "\eb58";
 }
 
 .cke_menubutton__justifycenter1 .cke_menubutton_icon::after {
-	content: "\ea2d";
+	content: "\eb57";
 }
 
 .cke_menubutton__justifyright2 .cke_menubutton_icon::after {
-	content: "\ea2f";
+	content: "\eb59";
 }
 
 .cke_menubutton__justifyblock3 .cke_menubutton_icon::after {
-	content: "\e90e";
+	content: "\e945";
 }
