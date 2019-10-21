@@ -223,3 +223,7 @@ span.cke_dialog_ui_button {
 .cke_menubutton__justifyblock3 .cke_menubutton_icon::after {
 	content: "\e945";
 }
+
+.cke_panel_listItem a img {
+	outline: none;
+}
