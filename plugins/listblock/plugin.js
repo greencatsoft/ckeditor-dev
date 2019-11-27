@@ -174,10 +174,13 @@ CKEDITOR.plugins.add( 'listblock', {
 
 					var itemId = this._.items[ value ],
 						item = this.element.getDocument().getById( itemId );
-					item.addClass( 'cke_selected' );
 
-					this.element.getDocument().getById( itemId + '_option' ).setAttribute( 'aria-selected', true );
-					this.onMark && this.onMark( item );
+					if ( item ) {
+						item.addClass( 'cke_selected' );
+
+						this.element.getDocument().getById( itemId + '_option' ).setAttribute( 'aria-selected', true );
+						this.onMark && this.onMark( item );
+					}
 				},
 
 				markFirstDisplayed: function() {
