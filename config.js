@@ -58,6 +58,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'save,' +
 		'selectall,' +
 		'spacingsliders,' +
+		'texteffectsliders,' +
 		'showblocks,' +
 		'showborders,' +
 		'smiley,' +

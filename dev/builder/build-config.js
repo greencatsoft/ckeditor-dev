@@ -60,6 +60,7 @@ var CKBUILDER_CONFIG = {
 		'computedfont' : 1,
 		'computedstyles' : 1,
 		'spacingsliders' : 1,
+		'texteffectsliders' : 1,
 		'enterkey' : 1,
 		'entities' : 1,
 		'floatingspace' : 1,
