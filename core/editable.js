@@ -1197,14 +1197,13 @@
 							range = sel.getRanges()[ 0 ],
 							startPath = range.startPath();
 
-		    			if ( range.collapsed ) {
-	    					if ( CKEDITOR.tools.trim( editor.element.getText() ).length > 0 && 
-								!mergeBlocksCollapsedSelection( editor, range, backspace, startPath ) )
-    							return;
+						if ( range.collapsed ) {
+							if ( !mergeBlocksCollapsedSelection( editor, range, backspace, startPath ) )
+								return;
    						} else {
-						    if ( !mergeBlocksNonCollapsedSelection( editor, range, startPath ) )
-					    		return;
-				    	}
+							if ( !mergeBlocksNonCollapsedSelection( editor, range, startPath ) )
+								return;
+						}
 
 						// Scroll to the new position of the caret (https://dev.ckeditor.com/ticket/11960).
 						editor.getSelection().scrollIntoView();
@@ -1534,7 +1533,7 @@
 
 				// Enlarge the range (assuming <ul> is selected element from guard):
 				//
-				// 	   X<ul><li>[Y]</li></ul>X    =>    X<ul><li>Y[</li></ul>]X
+				//         X<ul><li>[Y]</li></ul>X    =>    X<ul><li>Y[</li></ul>]X
 				//
 				// If the walker went deeper down DOM than a while ago when traversing
 				// backwards, then it doesn't make sense: an element must be selected
@@ -2462,6 +2461,38 @@
 		};
 	} )();
 
+	function removeText( elem ) {
+		if ( elem.type != CKEDITOR.NODE_ELEMENT ) {
+			elem.remove();
+			return;
+		}
+
+		var children = elem.getChildren();
+		var count = children.count();
+
+		for ( var i = count - 1; i >= 0; i-- ) {
+			var child = children.getItem( 0 );
+
+			removeText( child );
+		}
+	}
+
+	function pruneSubTree( elem ) {
+		var children = elem.getChildren();
+
+		if ( children.count() == 0 ) return elem;
+
+		for ( var i = children.count() - 1; i >= 0; i-- ) {
+			var child = children.getItem( i );
+
+			if ( i == 0 ) {
+				return pruneSubTree( child );
+			} else {
+				child.remove();
+			}
+		}
+	}
+
 	function mergeBlocksCollapsedSelection( editor, range, backspace, startPath ) {
 		var startBlock = startPath.block;
 
@@ -2469,10 +2500,36 @@
 		if ( !startBlock )
 			return false;
 
+		var content = startBlock.getText();
+
+		content = content ? content.trim() : undefined;
+
 		// Exclude cases where, i.e. if pressed arrow key, selection
 		// would move within the same block (merge inside a block).
-		if ( !range[ backspace ? 'checkStartOfBlock' : 'checkEndOfBlock' ]() )
+		if ( !range[ backspace ? 'checkStartOfBlock' : 'checkEndOfBlock' ]() ) {
+			if ( content && content.length == 1 ) {
+				editor.fire( 'saveSnapshot' );
+
+				var bogus;
+				if ( ( bogus = startBlock.getBogus() ) )
+					bogus.remove();
+
+				range.enlarge( CKEDITOR.ENLARGE_INLINE );
+
+				removeText( startBlock );
+				pruneSubTree( startBlock );
+
+				range.startContainer.appendBogus();
+
+				return true;
+			}
+
 			return false;
+		}
+
+		if ( content || content.length == 0 ) {
+			return range.root.getText().trim().length == 0;
+		}
 
 		// Make sure, there's an editable position to put selection,
 		// which i.e. would be used if pressed arrow key, but abort
@@ -2529,9 +2586,10 @@
 		var startBlock = startPath.block,
 			endPath = range.endPath(),
 			endBlock = endPath.block;
+		var deleteAllContents = range.checkStartOfBlock() && range.checkEndOfBlock();
 
 		// Selection must be anchored in two different blocks.
-		if ( !startBlock || !endBlock || startBlock.equals( endBlock ) )
+		if ( !startBlock || !endBlock || !deleteAllContents && startBlock.equals( endBlock ) )
 			return false;
 
 		editor.fire( 'saveSnapshot' );
@@ -2544,10 +2602,20 @@
 		// Changing end container to element from text node (https://dev.ckeditor.com/ticket/12503).
 		range.enlarge( CKEDITOR.ENLARGE_INLINE );
 
-		// Delete range contents. Do NOT merge. Merging is weird.
-		range.deleteContents();
+		if ( deleteAllContents ) {
+			removeText( startBlock );
 
-		if ( editor.config.forceMergeBlocks !== false ) {
+			var empty = pruneSubTree( startBlock );
+
+			if ( empty && !startBlock.equals( endBlock ) ) {
+				range.setStartAfter( startBlock );
+				range.deleteContents();
+			}
+		} else {
+			range.deleteContents();
+		}
+
+		if ( editor.config.forceMergeBlocks !== false && !startBlock.equals( endBlock ) ) {
 			// If something has left of the block to be merged, clean it up.
 			// It may happen when merging with list items.
 			if ( endBlock.getParent() ) {
